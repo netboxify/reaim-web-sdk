@@ -7,7 +7,8 @@ import {
   REAIM_SDK_VISITS,
   REAIM_DENIED_ON_VISITS,
   REAIM_PUSH_USER_SUBSCRIBED,
-  REAIM_UID
+  REAIM_UID,
+  REAIM_SUBS_API
 } from './constants';
 
 /* eslint-disable */
@@ -24,7 +25,7 @@ class ReAimSDK {
       throw new Error('Type of onBlock parameter should be function.');
     }
 
-    this.metaEndpoint = process.env.NODE_ENV !== 'production' ? 'http://localhost:4343' : 'https://subs.reaim.me';
+    this.metaEndpoint = REAIM_SUBS_API;
     this.onAllow = onAllow || noop;
     this.onBlock = onBlock || noop;
   }
@@ -235,7 +236,9 @@ class ReAimSDK {
             <img src="${promptMeta.logo}" alt="logo">
           </div>
 
-          <small><a href="https://reaim.me" target="_blank" rel="noopener">Powered by ReAim</a></small>
+          ${promptMeta.removeBranding ? '' : `<small>
+            <a href="https://reaim.me" target="_blank" rel="noopener">Powered by ReAim</a>
+          </small>`}
         </div>
 
         <div class="reaim-modal-content">
@@ -367,5 +370,4 @@ class ReAimSDK {
 }
 
 window.ReAimSDK = ReAimSDK;
-
 export default ReAimSDK;

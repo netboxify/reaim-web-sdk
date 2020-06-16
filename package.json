@@ -45,5 +45,8 @@
   "nyc": {
     "sourceMap": false,
     "instrument": false
+  },
+  "dependencies": {
+    "serviceworker-storage": "^0.1.0"
   }
 }

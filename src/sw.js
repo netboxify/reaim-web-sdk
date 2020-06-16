@@ -1,14 +1,19 @@
 /* eslint-disable */
 import regeneratorRuntime from 'regenerator-runtime';
 /* eslint-enable */
+import ServiceWorkerStorage from 'serviceworker-storage';
+import {
+  REAIM_SAVE_SUBSCRIPTION,
+  REAIM_EVENTS_API
+} from './constants';
 
-const API = process.env.NODE_ENV !== 'production' ? 'http://localhost:5555' : 'https://events.reaim.me';
+const storage = new ServiceWorkerStorage('reaim_sdk_storage', 1);
 
-class ReAimSDK {
+class ReAimSW {
 
   static async log(kind, tracking) {
     if (kind && tracking) {
-      fetch(`${API}/log?k=${kind}&${atob(tracking)}`);
+      fetch(`${REAIM_EVENTS_API}/log?k=${kind}&${atob(tracking)}`);
     }
   }
 
@@ -31,7 +36,7 @@ class ReAimSDK {
       }
     };
 
-    ReAimSDK.log('i', payload.t);
+    ReAimSW.log('i', payload.t);
     event.waitUntil(self.registration.showNotification(title, options));
   }
 
@@ -39,7 +44,7 @@ class ReAimSDK {
     event.notification.close();
 
     if (event.notification.data.url) {
-      ReAimSDK.log('c', event.notification.data.tracking);
+      ReAimSW.log('c', event.notification.data.tracking);
       event.waitUntil(self.clients.openWindow(event.notification.data.url));
     }
   }
@@ -47,9 +52,20 @@ class ReAimSDK {
   static async handleUpdateSubscription(event) {
 
   }
+
+  static async savePush(subscription) {
+    await storage.setItem('subscription', subscription);
+  }
+
+  static async handleMessage(event) {
+    if (event.data.action === REAIM_SAVE_SUBSCRIPTION) {
+      event.waitUntil(ReAimSW.savePush(event.data.subscription));
+    }
+  }
 }
 
-self.addEventListener('install', ReAimSDK.handleInstall);
-self.addEventListener('push', ReAimSDK.handlePushEvent);
-self.addEventListener('notificationclick', ReAimSDK.handleClickEvent);
-self.addEventListener('pushsubscriptionchange', ReAimSDK.handleUpdateSubscription);
+self.addEventListener('install', ReAimSW.handleInstall);
+self.addEventListener('push', ReAimSW.handlePushEvent);
+self.addEventListener('notificationclick', ReAimSW.handleClickEvent);
+self.addEventListener('pushsubscriptionchange', ReAimSW.handleUpdateSubscription);
+self.addEventListener('message', ReAimSW.handleMessage);
