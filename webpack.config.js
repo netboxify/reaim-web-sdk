@@ -21,7 +21,7 @@ const config = {
   mode: mode,
   entry: {
     install: __dirname + '/src/index.js',
-    sw: __dirname + '/src/sw.js'
+    "reaim-sw": __dirname + '/src/sw.js'
   },
   devtool: 'inline-source-map',
   output: {

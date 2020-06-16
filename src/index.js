@@ -10,6 +10,10 @@ import {
   REAIM_UID
 } from './constants';
 
+/* eslint-disable */
+import regeneratorRuntime from 'regenerator-runtime';
+/* eslint-enable */
+
 class ReAimSDK {
   constructor(onAllow, onBlock) {
     if (onAllow && typeof onAllow !== 'function') {
@@ -58,7 +62,7 @@ class ReAimSDK {
   }
 
   registerSW() {
-    return navigator.serviceWorker.register('/reaim-sdk-web.js');
+    return navigator.serviceWorker.register('/reaim-sw.js');
   }
 
   prepareRequest(subscription, metadata) {
@@ -361,5 +365,7 @@ class ReAimSDK {
     }
   }
 }
+
+window.ReAimSDK = ReAimSDK;
 
 export default ReAimSDK;

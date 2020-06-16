@@ -1,3 +1,7 @@
+/* eslint-disable */
+import regeneratorRuntime from 'regenerator-runtime';
+/* eslint-enable */
+
 const API = process.env.NODE_ENV !== 'production' ? 'http://localhost:5555' : 'https://events.reaim.me';
 
 class ReAimSDK {
