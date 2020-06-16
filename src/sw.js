@@ -4,10 +4,13 @@ import regeneratorRuntime from 'regenerator-runtime';
 import ServiceWorkerStorage from 'serviceworker-storage';
 import {
   REAIM_SAVE_SUBSCRIPTION,
-  REAIM_EVENTS_API
+  REAIM_EVENTS_API,
+  REAIM_STORAGE_NAME,
+  REAIM_IMPRESSION,
+  REAIM_CLICK
 } from './constants';
 
-const storage = new ServiceWorkerStorage('reaim_sdk_storage', 1);
+const storage = new ServiceWorkerStorage(REAIM_STORAGE_NAME, 1);
 
 class ReAimSW {
 
@@ -36,7 +39,7 @@ class ReAimSW {
       }
     };
 
-    ReAimSW.log('i', payload.t);
+    ReAimSW.log(REAIM_IMPRESSION, payload.t);
     event.waitUntil(self.registration.showNotification(title, options));
   }
 
@@ -44,7 +47,7 @@ class ReAimSW {
     event.notification.close();
 
     if (event.notification.data.url) {
-      ReAimSW.log('c', event.notification.data.tracking);
+      ReAimSW.log(REAIM_CLICK, event.notification.data.tracking);
       event.waitUntil(self.clients.openWindow(event.notification.data.url));
     }
   }

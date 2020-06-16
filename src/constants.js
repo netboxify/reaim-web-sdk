@@ -11,3 +11,6 @@ export const REAIM_UID = 'reaim_sdk_uid';
 export const REAIM_SAVE_SUBSCRIPTION = 'reaim_save_subscription';
 export const REAIM_EVENTS_API = !PRODUCTION ? LOCAL_EVENTS_API : PROD_EVENTS_API;
 export const REAIM_SUBS_API = !PRODUCTION ? LOCAL_SUBS_API : PROD_SUBS_API;
+export const REAIM_STORAGE_NAME = 'reaim_sdk_storage';
+export const REAIM_IMPRESSION = 'i';
+export const REAIM_CLICK = 'c';

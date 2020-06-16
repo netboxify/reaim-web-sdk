@@ -11,6 +11,9 @@ import {
   REAIM_SUBS_API
 } from './constants';
 
+import renderUI from './html';
+import renderStyles from './css';
+
 /* eslint-disable */
 import regeneratorRuntime from 'regenerator-runtime';
 /* eslint-enable */
@@ -149,107 +152,8 @@ class ReAimSDK {
   }
 
   showCustomModal(metadata, promptMeta) {
-
-    const css = `
-        .reaim-web-modal {
-          box-sizing: border-box;
-          display: flex;
-          position: absolute;
-          max-width: 547px;
-          padding: 45px;
-          font-size: 14px;
-          font-weight: 100;
-          width: 100%;
-          height: 200px;
-          background: ${promptMeta.backgroundColor};
-          color: ${promptMeta.fontColor};
-          margin: 0 auto;
-          left: 0;
-          right: 0;
-          box-shadow: 0 20px 70px 0 #E5E8EC;
-          border-radius: 8px;
-          top: 0;
-        }
-
-        .reaim-prompt-logo-branding small a {
-          position: relative;
-          top: 15px;
-          text-decoration: none;
-          opacity: 0.5;
-          color: #020E17;
-          font-size: 10px;
-          text-decoration: none;
-        }
-
-        .reaim-prompt-logo {
-          width: 80px;
-          height: 80px;
-          margin-right: 30px;
-        }
-
-        .reaim-prompt-logo img {
-          max-width: 80px;
-          width: 100%;
-        }
-
-        .reaim-modal-content {
-          width: 350px;
-          position: relative;
-        }
-
-        .reaim-modal-content p {
-          height: 65px;
-          font-size: 16px;
-          margin-top: 0;
-        }
-
-        .reaim-prompt-buttons {
-          position: absolute;
-          right: 20px;
-        }
-
-        .reaim-prompt-buttons button {
-          height: 52px;
-          border-radius: 8px;
-          cursor: pointer;
-          margin-left: 10px;
-          padding: 10px 20px;
-          border: none;
-          outline: none;
-        }
-
-        .reaim-button-deny {
-          backgorund: ${promptMeta.blockButtonColor};
-          color: ${promptMeta.blockFontColor};
-        }
-
-        .reaim-button-accept {
-          background: ${promptMeta.allowButtonColor};
-          color: ${promptMeta.allowFontColor};
-        }
-
-      `;
-
-    const html = `
-        <div class="reaim-prompt-logo-branding">
-          <div class="reaim-prompt-logo">
-            <img src="${promptMeta.logo}" alt="logo">
-          </div>
-
-          ${promptMeta.removeBranding ? '' : `<small>
-            <a href="https://reaim.me" target="_blank" rel="noopener">Powered by ReAim</a>
-          </small>`}
-        </div>
-
-        <div class="reaim-modal-content">
-          <p>${promptMeta.actionText}</p>
-          <div class="reaim-prompt-buttons">
-            <button class="reaim-button-deny">${promptMeta.blockButton}</button>
-            <button class="reaim-button-accept">${promptMeta.allowButton}</button>
-          </div>
-        </div>
-      `;
-
+    const css = renderStyles(promptMeta);
+    const html = renderUI(promptMeta);
     const ReAimCSS = document.createElement('style');
 
     ReAimCSS.innerHTML = css;
@@ -301,9 +205,9 @@ class ReAimSDK {
   }
 
   showModal(metadata) {
-    const promptMeta = JSON.parse(atob(metadata.prompt));
-
     if (metadata.prompt_type === 'custom') {
+      const promptMeta = JSON.parse(atob(metadata.prompt));
+
       if (promptMeta.showImmediately) {
         this.log('show_immediately_custom_prompt');
         this.showCustomModal(metadata, promptMeta);
