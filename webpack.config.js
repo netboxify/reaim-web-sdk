@@ -11,15 +11,18 @@ let outputFile, mode;
 
 if (env === 'build') {
   mode = 'production';
-  outputFile = libraryName + '.min.js';
+  outputFile = '[name].min.js';
 } else {
   mode = 'development';
-  outputFile = libraryName + '.js';
+  outputFile = '[name].js';
 }
 
 const config = {
   mode: mode,
-  entry: __dirname + '/src/index.js',
+  entry: {
+    install: __dirname + '/src/index.js',
+    sw: __dirname + '/src/sw.js'
+  },
   devtool: 'inline-source-map',
   output: {
     path: __dirname + '/lib',
