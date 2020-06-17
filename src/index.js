@@ -8,7 +8,8 @@ import {
   REAIM_DENIED_ON_VISITS,
   REAIM_PUSH_USER_SUBSCRIBED,
   REAIM_UID,
-  REAIM_SUBS_API
+  REAIM_SUBS_API,
+  REAIM_SAVE_SUBSCRIPTION
 } from './constants';
 
 import renderUI from './html';
@@ -98,9 +99,11 @@ class ReAimSDK {
 
       this.setValue(REAIM_UID, id);
       this.setAsSubscribed();
+
       if (this.htmlDOM) {
         this.hideModal();
       }
+
       this.log('user_subscribed');
     } catch (err) {
       console.log(err);
@@ -121,7 +124,15 @@ class ReAimSDK {
 
       const subscription = await this.registration.pushManager.subscribe(subscriptionOptions);
 
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+          action: REAIM_SAVE_SUBSCRIPTION,
+          subscription: JSON.parse(JSON.stringify(subscription))
+        });
+      }
+
       this.onAllow();
+
       const stringified = JSON.stringify(subscription);
       const parsed = JSON.parse(stringified);
       const userObject = this.prepareRequest(parsed, metadata);
@@ -262,14 +273,16 @@ class ReAimSDK {
 
     this.registration = await this.registerSW();
 
-    if (this.canSubscribe()) {
-      this.log('try_to_subscribe');
-      const metadata = await this.getMetadata();
+    navigator.serviceWorker.ready.then(async () => {
+      if (this.canSubscribe()) {
+        this.log('try_to_subscribe');
+        const metadata = await this.getMetadata();
 
-      this.showModal(metadata);
-    } else {
-      this.checkIfStillSubscribed();
-    }
+        this.showModal(metadata);
+      } else {
+        this.checkIfStillSubscribed();
+      }
+    });
   }
 }
 
