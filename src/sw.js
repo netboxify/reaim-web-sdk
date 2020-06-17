@@ -84,6 +84,11 @@ class ReAimSW {
     const newSubscription = await self.registration.pushManager.getSubscription();
     const oldSubscription = JSON.parse(await storage.getItem('subscription'));
 
+    if (!oldSubscription) {
+      ReAimSW.saveLocalSubscription(newSubscription);
+      ReAimSW.updateSubscription(newSubscription);
+    }
+
     if (newSubscription && oldSubscription && (newSubscription.endpoint !== oldSubscription.endpoint)) {
       ReAimSW.saveLocalSubscription(newSubscription);
       ReAimSW.updateSubscription(newSubscription);
@@ -95,7 +100,6 @@ class ReAimSW {
   }
 
   static async handleMessage(event) {
-    console.log('Received Message From Client script');
     if (event.data.action === REAIM_SAVE_SUBSCRIPTION) {
       event.waitUntil(ReAimSW.saveLocalSubscription(event.data.subscription));
     }
