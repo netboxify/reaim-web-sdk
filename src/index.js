@@ -265,13 +265,34 @@ class ReAimSDK {
     return JSON.parse(this.getValue(REAIM_SDK_VISITS)) || 0;
   }
 
-  trackConversion(payout) {
+  static trackConversion(payout) {
     const params = new URLSearchParams(window.location.search);
     const trackingID = params.get('r_cid');
 
     if (trackingID && payout) {
       fetch(`${REAIM_EVENTS_API}/conv?t=${trackingID}&payout=${payout}`);
     }
+  }
+
+  static addTags(tags) {
+    const isSubscribed = JSON.parse(localStorage.getItem(REAIM_PUSH_USER_SUBSCRIBED));
+    const sid = JSON.parse(localStorage.getItem(REAIM_UID));
+
+    if (!isSubscribed || !sid) {
+      return;
+    }
+
+    if (!Array.isArray('tags') && typeof tags === 'string') {
+      tags = [tags];
+    }
+
+    fetch(`${REAIM_SUBS_API}/tags`, {
+      method: 'POST',
+      body: JSON.stringify({
+        subscriber: sid,
+        tags
+      })
+    });
   }
 
   async init(sitesUID) {
