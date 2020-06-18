@@ -9,6 +9,7 @@ import {
   REAIM_PUSH_USER_SUBSCRIBED,
   REAIM_UID,
   REAIM_SUBS_API,
+  REAIM_EVENTS_API,
   REAIM_SAVE_SUBSCRIPTION
 } from './constants';
 
@@ -262,6 +263,15 @@ class ReAimSDK {
 
   getVisits() {
     return JSON.parse(this.getValue(REAIM_SDK_VISITS)) || 0;
+  }
+
+  trackConversion(payout) {
+    const params = new URLSearchParams(window.location.search);
+    const trackingID = params.get('r_cid');
+
+    if (trackingID && payout) {
+      fetch(`${REAIM_EVENTS_API}/conv?t=${trackingID}&payout=${payout}`);
+    }
   }
 
   async init(sitesUID) {
