@@ -15,7 +15,7 @@ export default (promptMeta) => {
       margin: 0 auto;
       left: 0;
       right: 0;
-      box-shadow: 0 20px 70px 0 #E5E8EC;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
       border-radius: 8px;
       top: 0;
     }
@@ -88,6 +88,9 @@ export default (promptMeta) => {
         right: 0;
       }
 
+      .reaim-modal-content p {
+        font-size: 14px;
+      }
 
       .reaim-prompt-logo {
         width: 68px;
