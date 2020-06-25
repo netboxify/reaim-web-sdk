@@ -42,7 +42,7 @@ export default (promptMeta) => {
     }
 
     .reaim-modal-content {
-      width: 350px;
+      width: 360px;
       position: relative;
     }
 
@@ -75,6 +75,55 @@ export default (promptMeta) => {
     .reaim-button-accept {
       background: ${promptMeta.allowButtonColor};
       color: ${promptMeta.allowFontColor};
+    }
+
+    @media(max-width: 768px) {
+      .reaim-web-modal {
+        max-width: 375px;
+        font-size: 12px;
+        position: absolute;
+        bottom: 0;
+        top: auto;
+        left: 0;
+        right: 0;
+      }
+
+
+      .reaim-prompt-logo {
+        width: 68px;
+        height: 68px;
+      }
+
+      .reaim-prompt-buttons {
+        display: flex;
+        right: 0;
+      }
+
+      .reaim-prompt-buttons button {
+        height: 40px;
+        padding: 10px 15px;
+      }
+    }
+
+
+    @media(max-width: 350px) {
+      .reaim-modal-content p {
+        height: 90px;
+      }
+    }
+
+    @media(max-width: 324px) {
+      .reaim-web-modal {
+        height: 250px;
+      }
+
+      .reaim-modal-content p {
+        height: 110px;
+      }
+
+      .reaim-prompt-buttons button {
+        paddding: 10px 10px;
+      }
     }
   `;
 };

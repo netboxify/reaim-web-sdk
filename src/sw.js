@@ -61,9 +61,11 @@ class ReAimSW {
       icon: payload.c.i,
       image: payload.c.m,
       badge: payload.c.b,
+      actions: payload.c.a,
       data: {
         tracking: payload.t,
-        url: payload.c.u
+        url: payload.c.u,
+        actions: payload.c.a
       }
     };
 
@@ -74,9 +76,21 @@ class ReAimSW {
   static async handleClickEvent(event) {
     event.notification.close();
 
-    if (event.notification.data.url) {
+    if (event.action === 'action-1') {
+      const url = event.notification.data.actions[0].url;
+
       ReAimSW.log(REAIM_CLICK, event.notification.data.tracking);
-      event.waitUntil(self.clients.openWindow(event.notification.data.url));
+      event.waitUntil(self.clients.openWindow(url));
+    } else if (event.action === 'action-2') {
+      const url = event.notification.data.actions[1].url;
+
+      ReAimSW.log(REAIM_CLICK, event.notification.data.tracking);
+      event.waitUntil(self.clients.openWindow(url));
+    } else {
+      if (event.notification.data.url) {
+        ReAimSW.log(REAIM_CLICK, event.notification.data.tracking);
+        event.waitUntil(self.clients.openWindow(event.notification.data.url));
+      }
     }
   }
 
