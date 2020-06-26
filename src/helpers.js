@@ -14,3 +14,11 @@ export function urlBase64ToUint8Array(base64String) {
   }
   return outputArray;
 }
+
+export function isValidToken(str) {
+  try {
+    return btoa(atob(str)) === str;
+  } catch (err) {
+    return false;
+  }
+}

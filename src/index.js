@@ -1,6 +1,7 @@
 import {
   noop,
-  urlBase64ToUint8Array
+  urlBase64ToUint8Array,
+  isValidToken
 } from './helpers';
 
 import {
@@ -269,7 +270,7 @@ class ReAimSDK {
     const params = new URLSearchParams(window.location.search);
     const trackingID = params.get('r_cid');
 
-    if (trackingID && payout) {
+    if (trackingID && payout && isValidToken(trackingID)) {
       fetch(`${REAIM_EVENTS_API}/conv?t=${trackingID}&payout=${payout}`);
     }
   }
