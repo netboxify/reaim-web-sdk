@@ -11,7 +11,8 @@ import {
   REAIM_UID,
   REAIM_SUBS_API,
   REAIM_EVENTS_API,
-  REAIM_SAVE_SUBSCRIPTION
+  REAIM_SAVE_SUBSCRIPTION,
+  REAIM_SW_PATH
 } from './constants';
 
 import renderUI from './html';
@@ -69,7 +70,7 @@ class ReAimSDK {
   }
 
   registerSW() {
-    return navigator.serviceWorker.register('/reaim-sw.js');
+    return navigator.serviceWorker.register(REAIM_SW_PATH);
   }
 
   prepareRequest(subscription, metadata) {
@@ -108,7 +109,7 @@ class ReAimSDK {
 
       this.log('user_subscribed');
     } catch (err) {
-      console.log(err);
+      this.log(err);
     }
   }
 
@@ -145,7 +146,7 @@ class ReAimSDK {
         this.showWelcomeNotification(metadata);
       }
     } catch (err) {
-      console.log(err);
+      this.log(err);
       this.log('user_declined');
       this.onBlock();
     }
@@ -160,7 +161,7 @@ class ReAimSDK {
         data: { url: wnContent.url }
       });
     } catch (err) {
-      console.log(err);
+      this.log(err)
     }
   }
 
@@ -305,16 +306,14 @@ class ReAimSDK {
 
     this.registration = await this.registerSW();
 
-    navigator.serviceWorker.ready.then(async () => {
-      if (this.canSubscribe()) {
-        this.log('try_to_subscribe');
-        const metadata = await this.getMetadata();
+    if (this.canSubscribe()) {
+      this.log('try_to_subscribe');
+      const metadata = await this.getMetadata();
 
-        this.showModal(metadata);
-      } else {
-        this.checkIfStillSubscribed();
-      }
-    });
+      this.showModal(metadata);
+    } else {
+      this.checkIfStillSubscribed();
+    }
   }
 }
 

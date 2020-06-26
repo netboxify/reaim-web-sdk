@@ -3,24 +3,31 @@ export default (promptMeta) => {
     .reaim-web-modal {
       box-sizing: border-box;
       display: flex;
-      position: absolute;
+      flex-direction: column;
+      position: fixed;
       max-width: 547px;
       padding: 45px;
+      padding-bottom: 30px;
       font-size: 14px;
       font-weight: 100;
       width: 100%;
-      height: 200px;
       background: ${promptMeta.backgroundColor};
       color: ${promptMeta.fontColor};
       margin: 0 auto;
       left: 0;
       right: 0;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-      border-radius: 8px;
+      box-shadow: 1px 2px 20px rgba(0,0,0,0.12), -2px -1px 20px 0px rgba(0,0,0,0.24);
+      border-radius: 0px 0px 8px 8px;
       top: 0;
+      z-index: 999999;
+      font-family: "Arial", sans-serif;
     }
 
-    .reaim-prompt-logo-branding small a {
+    .reaim-web-modal .reaim-prompt-content-wrapper {
+      display: flex;
+    }
+
+    .reaim-web-modal .reaim-prompt-logo-branding small a {
       position: relative;
       top: 15px;
       text-decoration: none;
@@ -30,34 +37,34 @@ export default (promptMeta) => {
       text-decoration: none;
     }
 
-    .reaim-prompt-logo {
+    .reaim-web-modal .reaim-prompt-logo {
       width: 80px;
       height: 80px;
       margin-right: 30px;
     }
 
-    .reaim-prompt-logo img {
+    .reaim-web-modal .reaim-prompt-logo img {
       max-width: 80px;
       width: 100%;
     }
 
-    .reaim-modal-content {
+    .reaim-web-modal .reaim-modal-content {
       width: 360px;
       position: relative;
     }
 
-    .reaim-modal-content p {
+    .reaim-web-modal .reaim-modal-content p {
       height: 65px;
       font-size: 16px;
       margin-top: 0;
     }
 
-    .reaim-prompt-buttons {
-      position: absolute;
-      right: 20px;
+    .reaim-web-modal .reaim-prompt-buttons {
+      display: flex;
+      justify-content: flex-end;
     }
 
-    .reaim-prompt-buttons button {
+    .reaim-web-modal .reaim-prompt-buttons button {
       height: 52px;
       border-radius: 8px;
       cursor: pointer;
@@ -65,14 +72,15 @@ export default (promptMeta) => {
       padding: 10px 20px;
       border: none;
       outline: none;
+      font-size: 14px;
     }
 
-    .reaim-button-deny {
-      backgorund: ${promptMeta.blockButtonColor};
+    .reaim-web-modal .reaim-button-deny {
+      background: ${promptMeta.blockButtonColor};
       color: ${promptMeta.blockFontColor};
     }
 
-    .reaim-button-accept {
+    .reaim-web-modal .reaim-button-accept {
       background: ${promptMeta.allowButtonColor};
       color: ${promptMeta.allowFontColor};
     }
@@ -81,36 +89,40 @@ export default (promptMeta) => {
       .reaim-web-modal {
         max-width: 375px;
         font-size: 12px;
-        position: absolute;
+        position: fixed;
         bottom: 0;
         top: auto;
         left: 0;
         right: 0;
+        border-radius: 8px 8px 0px 0px;
+        padding-left: 20px;
+        padding-right: 20px;
       }
 
-      .reaim-modal-content p {
+      .reaim-web-modal .reaim-modal-content p {
         font-size: 14px;
       }
 
-      .reaim-prompt-logo {
+      .reaim-web-modal .reaim-prompt-logo {
         width: 68px;
         height: 68px;
       }
 
-      .reaim-prompt-buttons {
+      .reaim-web-modal .reaim-prompt-buttons {
         display: flex;
-        right: 0;
+        margin-top: 10px;
       }
 
-      .reaim-prompt-buttons button {
+      .reaim-web-modal .reaim-prompt-buttons button {
         height: 40px;
         padding: 10px 15px;
+        font-size: 12px;
       }
     }
 
 
     @media(max-width: 350px) {
-      .reaim-modal-content p {
+      .reaim-web-modal .reaim-modal-content p {
         height: 90px;
       }
     }
@@ -118,14 +130,17 @@ export default (promptMeta) => {
     @media(max-width: 324px) {
       .reaim-web-modal {
         height: 250px;
+        padding-left: 20px;
+        padding-right: 20px;
       }
 
-      .reaim-modal-content p {
+      .reaim-web-modal .reaim-modal-content p {
         height: 110px;
       }
 
-      .reaim-prompt-buttons button {
+      .reaim-web-modal .reaim-prompt-buttons button {
         paddding: 10px 10px;
+        font-size: 10px;
       }
     }
   `;
