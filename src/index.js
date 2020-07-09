@@ -154,14 +154,14 @@ class ReAimSDK {
 
   showWelcomeNotification(metadata) {
     try {
-      const wnContent = JSON.parse(atob(metadata.wn_content));
+      const wnContent = JSON.parse(decodeURIComponent(atob(metadata.wn_content)));
 
       this.registration.showNotification(wnContent.title, {
         body: wnContent.description,
         data: { url: wnContent.url }
       });
     } catch (err) {
-      this.log(err)
+      this.log(err);
     }
   }
 

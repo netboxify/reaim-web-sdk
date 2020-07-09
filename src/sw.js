@@ -16,9 +16,19 @@ const storage = new ServiceWorkerStorage(REAIM_STORAGE_NAME, 1);
 
 class ReAimSW {
 
-  static async log(kind, tracking) {
-    if (kind && tracking) {
-      fetch(`${REAIM_EVENTS_API}/log?k=${kind}&${atob(tracking)}`);
+  static async log(kind, tracking, variant) {
+    if (kind && tracking && variant) {
+      switch (variant) {
+        case 'cmp':
+          fetch(`${REAIM_EVENTS_API}/log?k=${kind}&${atob(tracking)}`);
+          break;
+        case 'trg':
+          fetch(`${REAIM_EVENTS_API}/trigger?k=${kind}&${atob(tracking)}`);
+          break;
+        case 'feed':
+          fetch(`${REAIM_EVENTS_API}/feed?k=${kind}&${atob(tracking)}`);
+          break;
+      }
     }
   }
 
@@ -65,30 +75,33 @@ class ReAimSW {
       data: {
         tracking: payload.t,
         url: payload.c.u,
-        actions: payload.c.a
+        actions: payload.c.a,
+        variant: payload.v
       }
     };
 
-    ReAimSW.log(REAIM_IMPRESSION, payload.t);
+    ReAimSW.log(REAIM_IMPRESSION, payload.t, payload.v);
     event.waitUntil(self.registration.showNotification(title, options));
   }
 
   static async handleClickEvent(event) {
     event.notification.close();
+    const tracking = event.notification.data.tracking;
+    const variant = event.notification.data.variant || 'cmp';
 
     if (event.action === 'action-1') {
       const url = event.notification.data.actions[0].url;
 
-      ReAimSW.log(REAIM_CLICK, event.notification.data.tracking);
+      ReAimSW.log(REAIM_CLICK, tracking, variant);
       event.waitUntil(self.clients.openWindow(url));
     } else if (event.action === 'action-2') {
       const url = event.notification.data.actions[1].url;
 
-      ReAimSW.log(REAIM_CLICK, event.notification.data.tracking);
+      ReAimSW.log(REAIM_CLICK, tracking, variant);
       event.waitUntil(self.clients.openWindow(url));
     } else {
       if (event.notification.data.url) {
-        ReAimSW.log(REAIM_CLICK, event.notification.data.tracking);
+        ReAimSW.log(REAIM_CLICK, tracking, variant);
         event.waitUntil(self.clients.openWindow(event.notification.data.url));
       }
     }

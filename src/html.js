@@ -2,7 +2,7 @@ export default (promptMeta) => {
   return `
     <div class="reaim-prompt-content-wrapper">
       <div class="reaim-prompt-logo-branding">
-        <div class="reaim-prompt-logo">
+        <div class="reaim-prompt-logo" style="${promptMeta.logo ? 'visibility: visible' : 'visibility: hidden'}">
           <img src="${promptMeta.logo}" alt="logo">
         </div>
 

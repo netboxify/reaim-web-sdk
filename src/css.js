@@ -28,6 +28,7 @@ export default (promptMeta) => {
     }
 
     .reaim-web-modal .reaim-prompt-logo-branding small a {
+      color: ${promptMeta.fontColor};
       position: relative;
       top: 15px;
       text-decoration: none;
