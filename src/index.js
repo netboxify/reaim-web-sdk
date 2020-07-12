@@ -12,7 +12,7 @@ import {
   REAIM_SUBS_API,
   REAIM_EVENTS_API,
   REAIM_SAVE_SUBSCRIPTION,
-  REAIM_SW_PATH
+  PRODUCTION
 } from './constants';
 
 import renderUI from './html';
@@ -69,8 +69,18 @@ class ReAimSDK {
     return localStorage.getItem(key);
   }
 
+  getSWPath() {
+    const path = !PRODUCTION ?
+      '/reaim-sw.js' :
+      (self.window && self.window.REAIM_SW_PATH_GLOBAL || '/sw.js');
+
+    return path;
+  }
+
   registerSW() {
-    return navigator.serviceWorker.register(REAIM_SW_PATH);
+    const path = this.getSWPath();
+
+    return navigator.serviceWorker.register(path);
   }
 
   prepareRequest(subscription, metadata) {
@@ -165,9 +175,20 @@ class ReAimSDK {
     }
   }
 
+  preloadImage(url) {
+    const img = new Image();
+
+    img.src = url;
+  }
+
   showCustomModal(metadata, promptMeta) {
     const css = renderStyles(promptMeta);
     const html = renderUI(promptMeta);
+
+    if (promptMeta.logo) {
+      this.preloadImage(promptMeta.logo);
+    }
+
     const ReAimCSS = document.createElement('style');
 
     ReAimCSS.innerHTML = css;
@@ -176,6 +197,7 @@ class ReAimSDK {
     const htmlDOM = document.createElement('div');
 
     htmlDOM.classList.add('reaim-web-modal');
+    htmlDOM.classList.add('reaim-web-modal-closed');
     htmlDOM.innerHTML = html;
 
     this.htmlDOM = htmlDOM;
@@ -197,6 +219,8 @@ class ReAimSDK {
     ReAimDOM.appendChild(htmlDOM);
     document.head.appendChild(ReAimCSS);
     document.body.appendChild(ReAimDOM);
+
+    htmlDOM.classList.remove('reaim-web-modal-closed');
   }
 
   hideModal() {

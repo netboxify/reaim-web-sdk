@@ -1,10 +1,9 @@
-const PRODUCTION = !!(process.env.NODE_ENV === 'production');
+export const PRODUCTION = !!(process.env.NODE_ENV === 'production');
 const LOCAL_EVENTS_API = 'http://localhost:5555';
 const LOCAL_SUBS_API = 'http://localhost:4343';
 const PROD_EVENTS_API = 'https://events.reaim.me';
 const PROD_SUBS_API = 'https://subs.reaim.me';
 
-export const REAIM_SW_PATH = !PRODUCTION ? '/reaim-sw.js' : (self.window && self.window.REAIM_SW_PATH_GLOBAL || '/sw.js');
 export const REAIM_SDK_VISITS = 'reaim_sdk_visits';
 export const REAIM_DENIED_ON_VISITS = 'reaim_sdk_denied_on_visits';
 export const REAIM_PUSH_USER_SUBSCRIBED = 'reaim_sdk_push_user_subscribed';

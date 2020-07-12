@@ -21,7 +21,8 @@ const config = {
   mode: mode,
   entry: {
     install: __dirname + '/src/index.js',
-    "reaim-sw": __dirname + '/src/sw.js'
+    "reaim-sw": __dirname + '/src/sw.js',
+    "shopify": __dirname + '/src/shopify.js'
   },
   devtool: 'inline-source-map',
   output: {

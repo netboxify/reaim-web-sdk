@@ -1,11 +1,13 @@
 export default (promptMeta) => {
   return `
     .reaim-web-modal {
+      all: initial;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
       position: fixed;
       max-width: 547px;
+      max-height: 500px;
       padding: 45px;
       padding-bottom: 30px;
       font-size: 14px;
@@ -21,21 +23,33 @@ export default (promptMeta) => {
       top: 0;
       z-index: 999999;
       font-family: "Arial", sans-serif;
+      transition-property: all;
+      transition-duration: .5s;
+      transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    }
+
+    .reaim-web-modal-closed {
+      max-height: 0;
+    }
+
+    .reaim-web-modal * {
+      all: unset;
     }
 
     .reaim-web-modal .reaim-prompt-content-wrapper {
       display: flex;
     }
 
-    .reaim-web-modal .reaim-prompt-logo-branding small a {
+    .reaim-web-modal .reaim-prompt-buttons small a {
+      display: block;
       color: ${promptMeta.fontColor};
       position: relative;
-      top: 15px;
       text-decoration: none;
       opacity: 0.5;
       color: #020E17;
-      font-size: 10px;
+      font-size: 9px;
       text-decoration: none;
+      cursor: button;
     }
 
     .reaim-web-modal .reaim-prompt-logo {
@@ -52,6 +66,7 @@ export default (promptMeta) => {
     .reaim-web-modal .reaim-modal-content {
       width: 360px;
       position: relative;
+      margin-left: 20px;
     }
 
     .reaim-web-modal .reaim-modal-content p {
@@ -62,10 +77,13 @@ export default (promptMeta) => {
 
     .reaim-web-modal .reaim-prompt-buttons {
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 25px;
     }
 
     .reaim-web-modal .reaim-prompt-buttons button {
+      box-sizing: border-box;
       height: 52px;
       border-radius: 8px;
       cursor: pointer;
@@ -130,7 +148,6 @@ export default (promptMeta) => {
 
     @media(max-width: 324px) {
       .reaim-web-modal {
-        height: 250px;
         padding-left: 20px;
         padding-right: 20px;
       }
