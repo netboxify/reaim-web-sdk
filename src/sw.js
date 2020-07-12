@@ -37,7 +37,7 @@ class ReAimSW {
       const id = localStorage.getItem(REAIM_UID);
 
       if (id) {
-        const req = new Request(REAIM_SUBS_API + '/refresh', {
+        const req = new Request(`${REAIM_SUBS_API}/refresh`, {
           method: 'POST',
           body: JSON.stringify({
             id,

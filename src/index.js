@@ -101,9 +101,31 @@ class ReAimSDK {
     };
   }
 
+  subscriptionExisted() {
+    return !!(this.getValue(REAIM_UID));
+  }
+
   async saveUser(user) {
     try {
-      const res = await fetch(this.metaEndpoint + '/save', {
+      if (this.subscriptionExisted()) {
+        const update = await fetch(`${this.metaEndpoint}/refresh`, {
+          method: 'POST',
+          body: JSON.stringify({
+            id: this.getValue(REAIM_UID),
+            endpoint: user.endpoint,
+            auth: user.auth,
+            p256dh: user.p256dh
+          })
+        });
+
+        if (update) {
+          this.log('user_updated');
+        }
+
+        return;
+      }
+
+      const res = await fetch(`${this.metaEndpoint}/save`, {
         method: 'POST',
         body: JSON.stringify(user)
       });
@@ -144,13 +166,13 @@ class ReAimSDK {
         });
       }
 
-      this.onAllow();
-
       const stringified = JSON.stringify(subscription);
       const parsed = JSON.parse(stringified);
       const userObject = this.prepareRequest(parsed, metadata);
 
-      this.saveUser(userObject);
+      await this.saveUser(userObject);
+
+      this.onAllow();
 
       if (metadata.wn) {
         this.showWelcomeNotification(metadata);
