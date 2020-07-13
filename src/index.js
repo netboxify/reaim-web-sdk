@@ -12,7 +12,8 @@ import {
   REAIM_SUBS_API,
   REAIM_EVENTS_API,
   REAIM_SAVE_SUBSCRIPTION,
-  PRODUCTION
+  PRODUCTION,
+  REAIM_RETRY_USER
 } from './constants';
 
 import renderUI from './html';
@@ -65,6 +66,10 @@ class ReAimSDK {
     localStorage.setItem(key, val);
   }
 
+  removeValue(key) {
+    localStorage.removeItem(key);
+  }
+
   getValue(key) {
     return localStorage.getItem(key);
   }
@@ -105,6 +110,24 @@ class ReAimSDK {
     return !!(this.getValue(REAIM_UID));
   }
 
+  saveForRetry(user) {
+    this.setValue(REAIM_RETRY_USER, JSON.stringify(user));
+  }
+
+  async retrySave() {
+    const user = this.getValue(REAIM_RETRY_USER);
+    const id = this.getValue(REAIM_UID);
+
+    if (user && !id) {
+      try {
+        await this.saveUser(JSON.parse(user));
+        this.removeValue(REAIM_RETRY_USER);
+      } catch (err) {
+        this.log('retry_save_failed');
+      }
+    }
+  }
+
   async saveUser(user) {
     try {
       if (this.subscriptionExisted()) {
@@ -141,6 +164,7 @@ class ReAimSDK {
 
       this.log('user_subscribed');
     } catch (err) {
+      this.saveForRetry(user);
       this.log(err);
     }
   }
@@ -359,6 +383,7 @@ class ReAimSDK {
       this.showModal(metadata);
     } else {
       this.checkIfStillSubscribed();
+      this.retrySave();
     }
   }
 }
