@@ -1,6 +1,8 @@
 export const PRODUCTION = !!(process.env.NODE_ENV === 'production');
+const LOCAL_API = 'http://localhost:5000';
 const LOCAL_EVENTS_API = 'http://localhost:5555';
 const LOCAL_SUBS_API = 'http://localhost:4343';
+const PROD_API = 'https://api.reaim.me';
 const PROD_EVENTS_API = 'https://events.reaim.me';
 const PROD_SUBS_API = 'https://subs.reaim.me';
 
@@ -10,6 +12,7 @@ export const REAIM_PUSH_USER_SUBSCRIBED = 'reaim_sdk_push_user_subscribed';
 export const REAIM_UID = 'reaim_sdk_uid';
 export const REAIM_RETRY_USER = 'reaim_sdk_retry_user';
 export const REAIM_SAVE_SUBSCRIPTION = 'reaim_save_subscription';
+export const REAIM_API = !PRODUCTION ? LOCAL_API : PROD_API;
 export const REAIM_EVENTS_API = !PRODUCTION ? LOCAL_EVENTS_API : PROD_EVENTS_API;
 export const REAIM_SUBS_API = !PRODUCTION ? LOCAL_SUBS_API : PROD_SUBS_API;
 export const REAIM_STORAGE_NAME = 'reaim_sdk_storage';

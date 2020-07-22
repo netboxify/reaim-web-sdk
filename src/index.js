@@ -9,6 +9,7 @@ import {
   REAIM_DENIED_ON_VISITS,
   REAIM_PUSH_USER_SUBSCRIBED,
   REAIM_UID,
+  REAIM_API,
   REAIM_SUBS_API,
   REAIM_EVENTS_API,
   REAIM_SAVE_SUBSCRIPTION,
@@ -346,8 +347,40 @@ class ReAimSDK {
     }
   }
 
+  static addToTrigger(triggerID, attributes) {
+    const isSubscribed = Notification.permission === 'granted';
+    const sid = localStorage.getItem(REAIM_UID);
+
+    if (!isSubscribed || !sid) {
+      return;
+    }
+
+    fetch(`${REAIM_API}/api/v1/trigger/add/subscriber`, {
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
+      body: JSON.stringify({
+        trigger_id: triggerID,
+        subscriber_id: sid,
+        props: attributes
+      })
+    });
+  }
+
+  static removeFromTrigger(triggerID) {
+    const sid = localStorage.getItem(REAIM_UID);
+
+    fetch(`${REAIM_API}/api/v1/trigger/remove/subscriber`, {
+      headers: { 'Content-Type': 'application/json' },
+      method: 'DELETE',
+      body: JSON.stringify({
+        trigger_id: triggerID,
+        subscriber_id: sid
+      })
+    });
+  }
+
   static addTags(tags) {
-    const isSubscribed = JSON.parse(localStorage.getItem(REAIM_PUSH_USER_SUBSCRIBED));
+    const isSubscribed = Notification.permission === 'granted';
     const sid = JSON.parse(localStorage.getItem(REAIM_UID));
 
     if (!isSubscribed || !sid) {
