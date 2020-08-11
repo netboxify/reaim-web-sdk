@@ -1,3 +1,5 @@
+import fetch from 'unfetch';
+
 import {
   noop,
   urlBase64ToUint8Array,
@@ -44,11 +46,15 @@ class ReAimSDK {
   }
 
   async getMetadata() {
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const response = await fetch(this.metaEndpoint + '/info?tz=' + timezone);
-    const metadata = await response.json();
+    try {
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const response = await fetch(this.metaEndpoint + '/info?tz=' + timezone);
+      const metadata = await response.json();
 
-    return metadata;
+      return metadata;
+    } catch (err) {
+      return null;
+    }
   }
 
   canSubscribe() {
@@ -413,7 +419,9 @@ class ReAimSDK {
       this.log('try_to_subscribe');
       const metadata = await this.getMetadata();
 
-      this.showModal(metadata);
+      if (metadata) {
+        this.showModal(metadata);
+      }
     } else {
       this.checkIfStillSubscribed();
       this.retrySave();

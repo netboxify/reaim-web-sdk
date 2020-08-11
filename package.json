@@ -47,6 +47,7 @@
     "instrument": false
   },
   "dependencies": {
-    "serviceworker-storage": "^0.1.0"
+    "serviceworker-storage": "^0.1.0",
+    "unfetch": "^4.1.0"
   }
 }
