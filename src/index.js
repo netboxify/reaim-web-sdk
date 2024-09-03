@@ -3,7 +3,8 @@ import fetch from 'unfetch';
 import {
   noop,
   urlBase64ToUint8Array,
-  isValidToken
+  isValidToken,
+  base64ToBytes
 } from './helpers';
 
 import {
@@ -217,7 +218,7 @@ class ReAimSDK {
 
   showWelcomeNotification(metadata) {
     try {
-      const wnContent = JSON.parse(decodeURIComponent(atob(metadata.wn_content)));
+      const wnContent = JSON.parse(decodeURIComponent(new TextDecoder().decode(base64ToBytes(metadata.wn_content))));
 
       this.registration.showNotification(wnContent.title, {
         body: wnContent.description,
@@ -297,7 +298,7 @@ class ReAimSDK {
 
   showModal(metadata) {
     if (metadata.prompt_type === 'custom') {
-      const promptMeta = JSON.parse(atob(metadata.prompt));
+      const promptMeta = JSON.parse(new TextDecoder().decode(base64ToBytes(metadata.prompt)));
 
       if (promptMeta.showImmediately) {
         this.log('show_immediately_custom_prompt');
