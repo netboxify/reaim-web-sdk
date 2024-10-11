@@ -158,7 +158,10 @@ class ReAimSDK {
 
       const res = await fetch(`${this.metaEndpoint}/save`, {
         method: 'POST',
-        body: JSON.stringify(user)
+        body: JSON.stringify(user),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        }
       });
 
       const id = await res.text();
